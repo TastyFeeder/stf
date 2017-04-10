@@ -2,9 +2,9 @@ var oboe = require('oboe')
 var _ = require('lodash')
 var EventEmitter = require('eventemitter3')
 
-module.exports = function DeviceServiceFactory($http, socket, EnhanceDeviceService) {
+module.exports = function DeviceServiceFactory($http, socket, EnhanceDeviceService, UserService) {
   var deviceService = {}
-
+  var myuser = UserService.currentUser
   function Tracker($scope, options) {
     var devices = []
     var devicesBySerial = Object.create(null)
@@ -161,6 +161,22 @@ module.exports = function DeviceServiceFactory($http, socket, EnhanceDeviceServi
     var tracker = new Tracker($scope, {
       filter: function() {
         return true
+      }
+    , digest: false
+    })
+
+    oboe('/api/v1/devices')
+      .node('devices[*]', function(device) {
+        tracker.add(device)
+      })
+
+    return tracker
+  }
+
+  deviceService.trackOwner = function($scope) {
+    var tracker = new Tracker($scope, {
+      filter: function(device) {
+        return device.whouse === myuser.name.trim()
       }
     , digest: false
     })

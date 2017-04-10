@@ -9,7 +9,7 @@ module.exports = function DeviceListCtrl(
 , SettingsService
 , $location
 ) {
-  $scope.tracker = DeviceService.trackAll($scope)
+  $scope.tracker = DeviceService.trackOwner($scope)
   $scope.control = ControlService.create($scope.tracker.devices, '*ALL')
 
   $scope.columnDefinitions = DeviceColumnService
