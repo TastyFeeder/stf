@@ -178,7 +178,7 @@ module.exports = function DeviceServiceFactory($http, socket, EnhanceDeviceServi
       filter: function(device) {
         return device.whouse === myuser.name.trim()
       }
-    , digest: false
+    , digest: true
     })
 
     oboe('/api/v1/devices')
